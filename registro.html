@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Financial Control</title>
+    <title>Cadastro — Financial Control</title>
         <link rel="icon" type="image/png" href="img/favicon.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,10 +20,17 @@
             <div class="auth-logo">
                 <img src="assets/logo.svg" alt="FC" width="52" height="52">
                 <h1 class="auth-title">Financial Control</h1>
-                <p class="auth-subtitle">Gestão financeira simplificada</p>
+                <p class="auth-subtitle">Crie sua conta</p>
             </div>
 
-            <form id="loginForm" class="auth-form" novalidate>
+            <form id="registroForm" class="auth-form" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="nome">Nome</label>
+                    <input class="form-input" type="text" id="nome" name="nome"
+                        placeholder="Seu nome completo" required autocomplete="name">
+                    <span class="form-error" id="nomeError"></span>
+                </div>
+
                 <div class="form-group">
                     <label class="form-label" for="email">E-mail</label>
                     <input class="form-input" type="email" id="email" name="email"
@@ -34,21 +41,28 @@
                 <div class="form-group">
                     <label class="form-label" for="senha">Senha</label>
                     <input class="form-input" type="password" id="senha" name="senha"
-                        placeholder="••••••••" required autocomplete="current-password">
+                        placeholder="••••••••" required autocomplete="new-password" minlength="6">
                     <span class="form-error" id="senhaError"></span>
                 </div>
 
-                <div class="form-error-general hidden" id="loginError"></div>
+                <div class="form-group">
+                    <label class="form-label" for="confirmarSenha">Confirmar senha</label>
+                    <input class="form-input" type="password" id="confirmarSenha" name="confirmarSenha"
+                        placeholder="••••••••" required autocomplete="new-password" minlength="6">
+                    <span class="form-error" id="confirmarSenhaError"></span>
+                </div>
 
-                <button type="submit" class="btn btn-primary btn-full mt-md" id="loginBtn">
-                    <span class="btn-text">Entrar</span>
+                <div class="form-error-general hidden" id="registroError"></div>
+
+                <button type="submit" class="btn btn-primary btn-full mt-md" id="registroBtn">
+                    <span class="btn-text">Criar conta</span>
                     <span class="btn-spinner hidden">
                         <span class="spinner spinner-sm"></span>
                     </span>
                 </button>
             </form>
 
-            <p class="auth-footer">Não tem conta? <a href="registro.html">Cadastre-se</a></p>
+            <p class="auth-footer">Já tem conta? <a href="index.html">Entrar</a></p>
         </div>
     </div>
 
@@ -56,29 +70,40 @@
 
     <script src="js/utils.js"></script>
     <script src="js/api.js"></script>
+    <script src="js/components.js"></script>
     <script src="js/auth.js"></script>
     <script>
         // Already logged in — skip to dashboard
         if (getToken()) window.location.href = 'dashboard.html';
 
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        document.getElementById('registroForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const btn = document.getElementById('loginBtn');
-            const loginError = document.getElementById('loginError');
+            const btn = document.getElementById('registroBtn');
+            const registroError = document.getElementById('registroError');
 
             clearFormErrors();
-            loginError.classList.add('hidden');
+            registroError.classList.add('hidden');
 
+            const nome = document.getElementById('nome').value.trim();
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value;
+            const confirmarSenha = document.getElementById('confirmarSenha').value;
+
+            if (senha !== confirmarSenha) {
+                const errEl = document.getElementById('confirmarSenhaError');
+                const input = document.getElementById('confirmarSenha');
+                errEl.textContent = 'As senhas não coincidem.';
+                input.classList.add('input-error');
+                return;
+            }
 
             setButtonLoading(btn, true);
 
             try {
-                const data = await api.post('/auth/login', { email, senha });
-                localStorage.setItem('fc_token', data.token);
-                window.location.href = 'dashboard.html';
+                await api.post('/auth/register', { nome, email, senha });
+                showToast('Conta criada com sucesso. Faça login para continuar.', 'success');
+                window.location.href = 'index.html';
             } catch (err) {
                 if (err.fieldErrors && Array.isArray(err.fieldErrors)) {
                     err.fieldErrors.forEach(function(fe) {
@@ -88,8 +113,8 @@
                         if (errEl) errEl.textContent = fe.message;
                     });
                 } else {
-                    loginError.textContent = err.message || err.erro || 'Credenciais inválidas. Verifique e-mail e senha.';
-                    loginError.classList.remove('hidden');
+                    registroError.textContent = err.message || err.erro || 'Não foi possível criar a conta. Tente novamente.';
+                    registroError.classList.remove('hidden');
                 }
             } finally {
                 setButtonLoading(btn, false);

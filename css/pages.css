@@ -118,6 +118,23 @@
     flex-direction: column;
 }
 
+.auth-footer {
+    margin: var(--space-lg) 0 0;
+    text-align: center;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+.auth-footer a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
 /* ===== DASHBOARD PAGE ===== */
 .dashboard-grid {
     display: grid;

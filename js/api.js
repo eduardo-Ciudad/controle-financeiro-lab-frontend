@@ -1,10 +1,12 @@
 /* API module — wraps fetch with auth token and error handling */
 (function () {
-   // var API_BASE = 'http://localhost:8080';
-  var API_BASE = 'https://financialcontrol-api-blin.onrender.com';
+    // Backend multi-tenant (controle-financeiro-lab) rodando na VPS.
+    // Atenção: é HTTP puro (sem SSL). Se o frontend for servido via HTTPS (ex: Vercel),
+    // o navegador vai bloquear a requisição por mixed content — troque para https:// quando
+    // a VPS tiver certificado configurado.
+    var API_BASE = 'http://187.77.57.4:8080';
 
 
-    
     function getToken() {
         return localStorage.getItem('fc_token');
     }

@@ -10,9 +10,10 @@ Interface web do sistema de controle financeiro desenvolvido para um fornecedor 
 ## Funcionalidades
 
 ### Autenticação
-- Tela de login com autenticação JWT
+- Tela de login e tela de cadastro (`registro.html`) — sistema multi-tenant self-service, sem usuário admin fixo
+- Autenticação JWT (`POST /auth/login`, `POST /auth/registro`)
 - Armazenamento do token no `localStorage`
-- Redirecionamento automático para login quando o token expira
+- Redirecionamento automático para login quando o token expira ou é inválido (401/403)
 
 ### Dashboard
 - Visão consolidada com cards de resumo (receitas, despesas, saldos)
@@ -48,6 +49,7 @@ Interface web do sistema de controle financeiro desenvolvido para um fornecedor 
 ```
 /
 ├── index.html              # Tela de login
+├── registro.html           # Tela de cadastro (novo usuário)
 ├── dashboard.html          # Dashboard principal
 ├── clientes.html           # Gestão de clientes
 ├── fornecedores.html       # Gestão de fornecedores
@@ -95,26 +97,28 @@ npx serve -l 5500
 
 ### Configuração da API
 
-O frontend se comunica com o backend via fetch. A URL base da API está configurada nos arquivos JS. Para apontar para o backend local durante o desenvolvimento, altere a URL base para:
+O frontend se comunica com o backend via fetch. A URL base da API está centralizada na constante `API_BASE`, no topo de [js/api.js](js/api.js). Atualmente aponta para o backend multi-tenant (controle-financeiro-lab) rodando na VPS:
+
+```
+http://187.77.57.4:8080
+```
+
+Para apontar para um backend local durante o desenvolvimento, troque `API_BASE` para:
 
 ```
 http://localhost:8080
 ```
 
-Para produção, a URL aponta para:
-
-```
-https://financialcontrol-api-blin.onrender.com
-```
-
 > **Importante:** O backend precisa estar rodando e com CORS configurado para a origin do frontend (`http://localhost:5500` em dev, `https://cadin-financeiro.vercel.app` em produção).
+>
+> **Mixed content:** a VPS atualmente serve a API em HTTP puro (sem SSL). Se o frontend for acessado via HTTPS (ex: Vercel), o navegador vai bloquear as requisições por mixed content. Enquanto a VPS não tiver certificado configurado, teste o frontend também via HTTP (`http://localhost:5500`, Live Server, etc.). Quando a VPS tiver HTTPS, atualize `API_BASE` em [js/api.js](js/api.js) para `https://...`.
 
 ## Deploy
 
 O frontend é hospedado no **Vercel** com deploy automático a partir do repositório GitHub.
 
 - **URL de Produção:** [cadin-financeiro.vercel.app](https://cadin-financeiro.vercel.app)
-- **Backend:** [financialcontrol-api-blin.onrender.com](https://financialcontrol-api-blin.onrender.com)
+- **Backend:** `http://187.77.57.4:8080` (VPS, controle-financeiro-lab multi-tenant)
 
 ### Configuração no Vercel
 
