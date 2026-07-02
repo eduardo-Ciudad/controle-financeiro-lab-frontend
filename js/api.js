@@ -1,0 +1,50 @@
+/* API module — wraps fetch with auth token and error handling */
+(function () {
+   // var API_BASE = 'http://localhost:8080';
+  var API_BASE = 'https://financialcontrol-api-blin.onrender.com';
+
+
+    
+    function getToken() {
+        return localStorage.getItem('fc_token');
+    }
+
+    async function request(path, options) {
+        options = options || {};
+        var token = getToken();
+        var headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+
+        var response;
+        try {
+            response = await fetch(API_BASE + path, Object.assign({}, options, { headers: headers }));
+        } catch (networkErr) {
+            throw { message: 'Sem conexão com o servidor. Verifique se o backend está rodando.' };
+        }
+
+        if (response.status === 401) {
+            localStorage.removeItem('fc_token');
+            window.location.href = 'index.html';
+            return;
+        }
+
+        if (!response.ok) {
+            var errorData = {};
+            try { errorData = await response.json(); } catch (_) {}
+            throw Object.assign({ status: response.status }, errorData);
+        }
+
+        if (response.status === 204) return null;
+        return response.json();
+    }
+
+    window.api = {
+        get:    function (path) { return request(path); },
+        post:   function (path, body) { return request(path, { method: 'POST',   body: JSON.stringify(body) }); },
+        put:    function (path, body) { return request(path, { method: 'PUT',    body: JSON.stringify(body) }); },
+        patch:  function (path, body) { return request(path, { method: 'PATCH',  body: body !== undefined ? JSON.stringify(body) : undefined }); },
+        delete: function (path)       { return request(path, { method: 'DELETE' }); },
+    };
+
+    window.getToken = getToken;
+})();

@@ -1,0 +1,327 @@
+/* ===== RESUMO DO DIA — navegação de data ===== */
+.dia-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.dia-nav h4 {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    min-width: 240px;
+    text-align: center;
+}
+
+.lancamentos-section-title {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: var(--space-sm);
+}
+
+/* ===== PESSOAL PAGE — resumo mensal ===== */
+.resumo-pessoal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+@media (max-width: 640px) {
+    .resumo-pessoal-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== PESSOAL PAGE — inline form grid ===== */
+.pessoal-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 150px 170px auto;
+    gap: var(--space-md);
+    align-items: end;
+}
+
+@media (max-width: 860px) {
+    .pessoal-form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .pessoal-submit-btn {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .pessoal-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== AUTH PAGE (LOGIN) ===== */
+.auth-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--space-lg);
+    background-color: var(--bg-primary);
+    background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(59,130,246,0.05) 0%, transparent 50%);
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+    box-shadow: var(--shadow-lg);
+}
+
+.auth-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+    text-align: center;
+    gap: var(--space-sm);
+}
+
+.auth-logo img {
+    width: 52px;
+    height: 52px;
+}
+
+.auth-title {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.auth-subtitle {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== DASHBOARD PAGE ===== */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.devedores-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.devedor-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    gap: var(--space-md);
+}
+
+.devedor-name {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-primary);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.devedor-saldo {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--danger);
+    flex-shrink: 0;
+}
+
+/* ===== VENDAS PAGE ===== */
+.vendas-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+}
+
+.vendas-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border);
+}
+
+.vendas-total {
+    font-family: var(--font-mono);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--accent);
+}
+
+@media (max-width: 640px) {
+    .vendas-form-grid {
+        grid-template-columns: 1fr;
+    }
+    .vendas-form-footer {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+}
+
+/* ===== CLIENTES / FORNECEDORES PAGES ===== */
+.back-btn-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.back-btn-row h3 {
+    margin: 0;
+}
+
+/* ===== PRODUTOS PAGE ===== */
+.estoque-card {
+    border-left: 4px solid var(--info);
+}
+
+/* ===== RESPONSIVE TABLES ===== */
+@media (max-width: 640px) {
+    .table th:nth-child(3),
+    .table td:nth-child(3) { display: none; }
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: var(--space-lg);
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== PAGE TRANSITIONS ===== */
+.main-content > section {
+    animation: fadeIn var(--transition-base) ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== RESPONSIVE TABLES — hide less important cols on small screens ===== */
+@media (max-width: 600px) {
+    .table th:nth-child(3),
+    .table td:nth-child(3) { display: none; }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .section-actions {
+        width: 100%;
+    }
+
+    .search-box .form-input {
+        width: 100%;
+    }
+
+    .section-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .action-bar {
+        flex-wrap: wrap;
+    }
+
+    .action-bar .spacer {
+        display: none;
+    }
+
+    .action-bar .btn {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .modal {
+        border-radius: var(--radius-lg);
+    }
+
+    .item-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    .item-total {
+        text-align: left;
+        padding: 0 0 var(--space-sm) 0;
+    }
+
+    .toast-container {
+        right: var(--space-sm);
+        left: var(--space-sm);
+    }
+
+    .toast {
+        max-width: 100%;
+    }
+}
+
+/* ===== FOCUS VISIBLE for accessibility ===== */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ===== PRINT ===== */
+.venda-info {
+    transition: opacity 0.15s;
+}
+
+.venda-info:hover {
+    opacity: 0.75;
+}
+
+@media print {
+    .sidebar, .topbar, .action-bar, .pagination, .btn { display: none !important; }
+    .main-wrapper { margin-left: 0; }
+    .card { box-shadow: none; border: 1px solid #ccc; }
+}

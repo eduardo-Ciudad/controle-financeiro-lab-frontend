@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Financial Control</title>
+        <link rel="icon" type="image/png" href="img/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body class="auth-body">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <img src="assets/logo.svg" alt="FC" width="52" height="52">
+                <h1 class="auth-title">Financial Control</h1>
+                <p class="auth-subtitle">Gestão financeira simplificada</p>
+            </div>
+
+            <form id="loginForm" class="auth-form" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="email">E-mail</label>
+                    <input class="form-input" type="email" id="email" name="email"
+                        placeholder="seu@email.com" required autocomplete="email">
+                    <span class="form-error" id="emailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="senha">Senha</label>
+                    <input class="form-input" type="password" id="senha" name="senha"
+                        placeholder="••••••••" required autocomplete="current-password">
+                    <span class="form-error" id="senhaError"></span>
+                </div>
+
+                <div class="form-error-general hidden" id="loginError"></div>
+
+                <button type="submit" class="btn btn-primary btn-full mt-md" id="loginBtn">
+                    <span class="btn-text">Entrar</span>
+                    <span class="btn-spinner hidden">
+                        <span class="spinner spinner-sm"></span>
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Already logged in — skip to dashboard
+        if (getToken()) window.location.href = 'dashboard.html';
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('loginBtn');
+            const loginError = document.getElementById('loginError');
+
+            clearFormErrors();
+            loginError.classList.add('hidden');
+
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value;
+
+            setButtonLoading(btn, true);
+
+            try {
+                const data = await api.post('/auth/login', { email, senha });
+                localStorage.setItem('fc_token', data.token);
+                window.location.href = 'dashboard.html';
+            } catch (err) {
+                if (err.fieldErrors && Array.isArray(err.fieldErrors)) {
+                    err.fieldErrors.forEach(function(fe) {
+                        const input = document.getElementById(fe.field);
+                        const errEl = document.getElementById(fe.field + 'Error');
+                        if (input) input.classList.add('input-error');
+                        if (errEl) errEl.textContent = fe.message;
+                    });
+                } else {
+                    loginError.textContent = err.message || err.erro || 'Credenciais inválidas. Verifique e-mail e senha.';
+                    loginError.classList.remove('hidden');
+                }
+            } finally {
+                setButtonLoading(btn, false);
+            }
+        });
+
+        function clearFormErrors() {
+            document.querySelectorAll('.form-error').forEach(function(el) { el.textContent = ''; });
+            document.querySelectorAll('.form-input').forEach(function(el) { el.classList.remove('input-error'); });
+        }
+
+        function setButtonLoading(btn, loading) {
+            btn.disabled = loading;
+            btn.querySelector('.btn-text').classList.toggle('hidden', loading);
+            btn.querySelector('.btn-spinner').classList.toggle('hidden', !loading);
+        }
+    </script>
+</body>
+</html>
