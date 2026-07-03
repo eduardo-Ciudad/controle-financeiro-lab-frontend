@@ -1,5 +1,14 @@
 /* ===== LANDING PAGE ===== */
 
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-bg-strong: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-blur: 12px;
+    --header-glass-bg: rgba(15, 17, 23, 0.8);
+    --accent-glow: rgba(16, 185, 129, 0.45);
+}
+
 .landing-body {
     background-color: var(--bg-primary);
 }
@@ -251,5 +260,20 @@
 
     .landing-cta-final__title {
         font-size: var(--text-2xl);
+    }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    [data-aos] {
+        transform: none !important;
+        opacity: 1 !important;
     }
 }
