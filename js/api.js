@@ -26,7 +26,7 @@
 
         if (response.status === 401) {
             localStorage.removeItem('fc_token');
-            window.location.href = 'index.html';
+            window.location.href = 'login.html';
             return;
         }
 

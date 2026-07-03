@@ -2,7 +2,7 @@
 (function () {
     function requireAuth() {
         if (!getToken()) {
-            window.location.href = 'index.html';
+            window.location.href = 'login.html';
             return false;
         }
         return true;
@@ -10,7 +10,7 @@
 
     function logout() {
         localStorage.removeItem('fc_token');
-        window.location.href = 'index.html';
+        window.location.href = 'login.html';
     }
 
     window.requireAuth = requireAuth;
