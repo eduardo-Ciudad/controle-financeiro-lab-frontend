@@ -48,7 +48,8 @@ Interface web do sistema de controle financeiro desenvolvido para um fornecedor 
 
 ```
 /
-├── index.html              # Tela de login
+├── index.html              # Landing page
+├── login.html              # Tela de login
 ├── registro.html           # Tela de cadastro (novo usuário)
 ├── dashboard.html          # Dashboard principal
 ├── clientes.html           # Gestão de clientes
