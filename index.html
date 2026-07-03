@@ -3,109 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Financial Control</title>
-        <link rel="icon" type="image/png" href="img/favicon.png">
+    <title>Controle Financeiro — Gestão financeira completa</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/landing.css">
 </head>
-<body class="auth-body">
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-logo">
-                <img src="assets/logo.svg" alt="FC" width="52" height="52">
-                <h1 class="auth-title">Financial Control</h1>
-                <p class="auth-subtitle">Gestão financeira simplificada</p>
-            </div>
+<body class="landing-body">
 
-            <form id="loginForm" class="auth-form" novalidate>
-                <div class="form-group">
-                    <label class="form-label" for="email">E-mail</label>
-                    <input class="form-input" type="email" id="email" name="email"
-                        placeholder="seu@email.com" required autocomplete="email">
-                    <span class="form-error" id="emailError"></span>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="senha">Senha</label>
-                    <input class="form-input" type="password" id="senha" name="senha"
-                        placeholder="••••••••" required autocomplete="current-password">
-                    <span class="form-error" id="senhaError"></span>
-                </div>
-
-                <div class="form-error-general hidden" id="loginError"></div>
-
-                <button type="submit" class="btn btn-primary btn-full mt-md" id="loginBtn">
-                    <span class="btn-text">Entrar</span>
-                    <span class="btn-spinner hidden">
-                        <span class="spinner spinner-sm"></span>
-                    </span>
-                </button>
-            </form>
-
-            <p class="auth-footer">Não tem conta? <a href="registro.html">Cadastre-se</a></p>
+    <header class="landing-header">
+        <div class="landing-container landing-header__inner">
+            <span class="landing-brand">Controle Financeiro</span>
+            <a href="index.html" class="btn-outline-glass">Entrar</a>
         </div>
-    </div>
+    </header>
 
-    <div id="toastContainer" class="toast-container"></div>
+    <main>
+        <section class="landing-hero">
+            <div class="landing-container landing-hero__grid">
+                <div class="landing-hero__text" data-aos="fade-right">
+                    <span class="eyebrow">✦ Gestão financeira inteligente</span>
+                    <h1 class="landing-hero__title">Gestão financeira <span class="text-accent">completa</span> para o seu negócio</h1>
+                    <p class="landing-hero__subtitle">
+                        Controle clientes, fornecedores, estoque e vendas em um só lugar —
+                        com a segurança e a organização que o seu negócio precisa.
+                    </p>
+                    <div class="landing-hero__actions">
+                        <a href="registro.html" class="btn-cta">Começar agora</a>
+                        <a href="#funcionalidades" class="btn-outline-glass">Como funciona</a>
+                    </div>
+                    <p class="landing-hero__hint">Crie sua conta gratuitamente</p>
+                </div>
 
-    <script src="js/utils.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
+                <div class="landing-hero__visual" data-aos="fade-left" data-aos-delay="150">
+                    <div class="dashboard-mock">
+                        <div class="dashboard-mock__header">
+                            <span class="dashboard-mock__dot"></span>
+                            <span class="dashboard-mock__dot"></span>
+                            <span class="dashboard-mock__dot"></span>
+                            <span class="dashboard-mock__title">Resumo financeiro</span>
+                        </div>
+                        <div class="dashboard-mock__kpis">
+                            <div class="dashboard-mock__kpi">
+                                <span class="dashboard-mock__kpi-label">Receitas</span>
+                                <span class="dashboard-mock__kpi-value dashboard-mock__kpi-value--up">R$ 24.850</span>
+                            </div>
+                            <div class="dashboard-mock__kpi">
+                                <span class="dashboard-mock__kpi-label">Despesas</span>
+                                <span class="dashboard-mock__kpi-value dashboard-mock__kpi-value--down">R$ 9.320</span>
+                            </div>
+                            <div class="dashboard-mock__kpi">
+                                <span class="dashboard-mock__kpi-label">Saldo</span>
+                                <span class="dashboard-mock__kpi-value dashboard-mock__kpi-value--up">R$ 15.530</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-mock__chart">
+                            <span class="dashboard-mock__bar" style="height: 40%"></span>
+                            <span class="dashboard-mock__bar" style="height: 65%"></span>
+                            <span class="dashboard-mock__bar" style="height: 45%"></span>
+                            <span class="dashboard-mock__bar" style="height: 80%"></span>
+                            <span class="dashboard-mock__bar" style="height: 55%"></span>
+                            <span class="dashboard-mock__bar" style="height: 90%"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="landing-features" id="funcionalidades">
+            <div class="landing-container">
+                <div class="landing-section-head" data-aos="fade-up">
+                    <span class="eyebrow eyebrow--center">FUNCIONALIDADES</span>
+                    <h2 class="landing-section-title">Tudo que seu negócio precisa</h2>
+                </div>
+                <div class="landing-features__grid">
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                        <span class="feature-card__number">01</span>
+                        <span class="feature-card__icon"><i data-lucide="users"></i></span>
+                        <h3 class="feature-card__title">Clientes e Fornecedores</h3>
+                        <p class="feature-card__desc">Gerencie sua carteira completa com lançamentos e extratos por cliente.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <span class="feature-card__number">02</span>
+                        <span class="feature-card__icon"><i data-lucide="package"></i></span>
+                        <h3 class="feature-card__title">Controle de Estoque</h3>
+                        <p class="feature-card__desc">Movimentações de entrada e saída com rastreabilidade por fornecedor.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <span class="feature-card__number">03</span>
+                        <span class="feature-card__icon"><i data-lucide="shopping-cart"></i></span>
+                        <h3 class="feature-card__title">Módulo de Vendas</h3>
+                        <p class="feature-card__desc">Registre vendas com baixa automática no estoque.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                        <span class="feature-card__number">04</span>
+                        <span class="feature-card__icon"><i data-lucide="wallet"></i></span>
+                        <h3 class="feature-card__title">Contas Pessoais</h3>
+                        <p class="feature-card__desc">Controle suas despesas pessoais separadas do negócio.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <span class="feature-card__number">05</span>
+                        <span class="feature-card__icon"><i data-lucide="bar-chart-3"></i></span>
+                        <h3 class="feature-card__title">Dashboard Financeiro</h3>
+                        <p class="feature-card__desc">Resumo diário e navegação mensal por todo o histórico.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <span class="feature-card__number">06</span>
+                        <span class="feature-card__icon"><i data-lucide="shield-check"></i></span>
+                        <h3 class="feature-card__title">Dados Isolados</h3>
+                        <p class="feature-card__desc">Cada usuário tem acesso exclusivo aos seus próprios dados.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="landing-why">
+            <div class="landing-container">
+                <div class="landing-section-head" data-aos="fade-up">
+                    <span class="eyebrow eyebrow--center">DIFERENCIAIS</span>
+                    <h2 class="landing-section-title">Por que usar?</h2>
+                </div>
+                <div class="landing-why__grid">
+                    <div class="why-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="why-item__badge"><i data-lucide="lock"></i></div>
+                        <span class="why-item__number">01</span>
+                        <h3 class="why-item__title">Integridade dos dados</h3>
+                        <p class="why-item__desc">Arquitetura append-only com estorno. Seus dados financeiros nunca são editados ou deletados.</p>
+                    </div>
+                    <div class="why-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="why-item__badge"><i data-lucide="shield"></i></div>
+                        <span class="why-item__number">02</span>
+                        <h3 class="why-item__title">Segurança</h3>
+                        <p class="why-item__desc">Autenticação JWT com isolamento multi-tenant. Ninguém acessa o que é seu.</p>
+                    </div>
+                    <div class="why-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="why-item__badge"><i data-lucide="globe"></i></div>
+                        <span class="why-item__number">03</span>
+                        <h3 class="why-item__title">Acesse de qualquer lugar</h3>
+                        <p class="why-item__desc">Hospedado em nuvem com HTTPS. Use do computador ou celular, quando quiser.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="landing-cta-final">
+            <div class="landing-container landing-cta-final__content" data-aos="fade-up">
+                <h2 class="landing-cta-final__title">Pronto para organizar suas finanças?</h2>
+                <a href="registro.html" class="btn-cta btn-cta--glow">Criar conta gratuita</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="landing-footer">
+        <div class="landing-container">
+            <p class="landing-footer__text">
+                Desenvolvido por Eduardo Ciudad —
+                <a href="https://linkedin.com/in/eduardociudadf/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                ·
+                <a href="https://github.com/eduardo-Ciudad" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-        // Already logged in — skip to dashboard
-        if (getToken()) window.location.href = 'dashboard.html';
-
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const btn = document.getElementById('loginBtn');
-            const loginError = document.getElementById('loginError');
-
-            clearFormErrors();
-            loginError.classList.add('hidden');
-
-            const email = document.getElementById('email').value.trim();
-            const senha = document.getElementById('senha').value;
-
-            setButtonLoading(btn, true);
-
-            try {
-                const data = await api.post('/auth/login', { email, senha });
-                localStorage.setItem('fc_token', data.token);
-                window.location.href = 'dashboard.html';
-            } catch (err) {
-                if (err.fieldErrors && Array.isArray(err.fieldErrors)) {
-                    err.fieldErrors.forEach(function(fe) {
-                        const input = document.getElementById(fe.field);
-                        const errEl = document.getElementById(fe.field + 'Error');
-                        if (input) input.classList.add('input-error');
-                        if (errEl) errEl.textContent = fe.message;
-                    });
-                } else {
-                    loginError.textContent = err.message || err.erro || 'Credenciais inválidas. Verifique e-mail e senha.';
-                    loginError.classList.remove('hidden');
-                }
-            } finally {
-                setButtonLoading(btn, false);
-            }
-        });
-
-        function clearFormErrors() {
-            document.querySelectorAll('.form-error').forEach(function(el) { el.textContent = ''; });
-            document.querySelectorAll('.form-input').forEach(function(el) { el.classList.remove('input-error'); });
-        }
-
-        function setButtonLoading(btn, loading) {
-            btn.disabled = loading;
-            btn.querySelector('.btn-text').classList.toggle('hidden', loading);
-            btn.querySelector('.btn-spinner').classList.toggle('hidden', !loading);
-        }
+        lucide.createIcons();
+        AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 50 });
     </script>
 </body>
 </html>
