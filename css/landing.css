@@ -417,25 +417,62 @@
     padding: var(--space-2xl) 0;
 }
 
-.landing-why__title {
-    text-align: center;
-    margin-bottom: var(--space-xl);
+.landing-why .landing-section-head {
+    margin-bottom: var(--space-2xl);
 }
 
 .landing-why__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-xl);
+    gap: var(--space-lg);
 }
 
 .why-item {
     text-align: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    transition: border-color var(--transition-base), transform var(--transition-base);
+    will-change: transform;
+}
+
+.why-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+    .why-item {
+        background: var(--bg-tertiary);
+    }
+}
+
+.why-item__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--glass-bg-strong);
+    border: 1px solid var(--glass-border);
+    color: var(--accent);
+    margin: 0 auto var(--space-md);
+}
+
+.why-item__badge svg {
+    width: 24px;
+    height: 24px;
 }
 
 .why-item__number {
     display: block;
-    font-size: var(--text-2xl);
+    font-size: var(--text-sm);
     font-weight: 700;
+    letter-spacing: 0.1em;
     color: var(--accent);
     margin-bottom: var(--space-sm);
 }
