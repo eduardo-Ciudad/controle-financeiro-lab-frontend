@@ -62,7 +62,7 @@
                 </button>
             </form>
 
-            <p class="auth-footer">Já tem conta? <a href="index.html">Entrar</a></p>
+            <p class="auth-footer">Já tem conta? <a href="login.html">Entrar</a></p>
         </div>
     </div>
 
@@ -103,7 +103,7 @@
             try {
                 await api.post('/auth/register', { nome, email, senha });
                 showToast('Conta criada com sucesso. Faça login para continuar.', 'success');
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             } catch (err) {
                 if (err.fieldErrors && Array.isArray(err.fieldErrors)) {
                     err.fieldErrors.forEach(function(fe) {
