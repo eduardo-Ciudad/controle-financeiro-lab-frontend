@@ -35,7 +35,7 @@
             '<button class="btn btn-primary" id="btnNovoProduto">+ Novo Produto</button>' +
             '</div>' +
             '</div>' +
-            '<div class="dashboard-grid" id="estoqueResumoGrid" style="grid-template-columns:1fr 1fr;margin-bottom:var(--space-lg)">' +
+            '<div class="estoque-resumo-grid" id="estoqueResumoGrid" style="margin-bottom:var(--space-lg)">' +
                 '<div class="stat-card"><div class="stat-label">Estoque (Custo)</div><div class="stat-value text-muted">—</div></div>' +
                 '<div class="stat-card"><div class="stat-label">Estoque (Venda)</div><div class="stat-value text-muted">—</div></div>' +
             '</div>' +

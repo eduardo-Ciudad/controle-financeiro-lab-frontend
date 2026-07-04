@@ -143,6 +143,24 @@
     margin-bottom: var(--space-xl);
 }
 
+.resumo-diario-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+}
+
+.vendas-resumo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-lg);
+}
+
+.estoque-resumo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+}
+
 .devedores-list {
     display: flex;
     flex-direction: column;
@@ -234,15 +252,34 @@
 @media (max-width: 640px) {
     .table th:nth-child(3),
     .table td:nth-child(3) { display: none; }
+
+    .table th,
+    .table td {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--text-xs);
+    }
+
+    .dashboard-grid,
+    .resumo-diario-grid,
+    .vendas-resumo-grid,
+    .estoque-resumo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-value {
+        font-size: var(--text-2xl);
+    }
+}
+
+@media (max-width: 380px) {
+    .stat-value {
+        font-size: var(--text-xl);
+    }
 }
 
 @media (max-width: 480px) {
     .auth-card {
         padding: var(--space-lg);
-    }
-
-    .dashboard-grid {
-        grid-template-columns: 1fr;
     }
 }
 

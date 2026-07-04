@@ -208,7 +208,7 @@
         var temLancamentos = lancClientes.length + lancForns.length > 0;
 
         return (
-            '<div class="dashboard-grid" style="grid-template-columns:1fr 1fr;padding:var(--space-lg) var(--space-lg) 0">' +
+            '<div class="resumo-diario-grid" style="padding:var(--space-lg) var(--space-lg) 0">' +
                 '<div class="stat-card">' +
                     '<div class="stat-label">Total Vendido</div>' +
                     '<div class="stat-value text-danger">' + formatMoney(vendido) + '</div>' +
@@ -608,7 +608,7 @@ function atualizarVendaHeader() {
 
         // Cards de resumo
         var html =
-            '<div class="dashboard-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-bottom:var(--space-xl)">' +
+            '<div class="vendas-resumo-grid" style="margin-bottom:var(--space-xl)">' +
                 '<div class="stat-card">' +
                     '<div class="stat-label">Receita Total</div>' +
                     '<div class="stat-value text-success">' + formatMoney(totalReceita) + '</div>' +
