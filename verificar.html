@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar E-mail — Financial Control</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <style>
+        .verificar-container {
+            max-width: 440px;
+        }
+
+        .verificar-state {
+            text-align: center;
+            animation: verificarFadeUp var(--transition-base) ease;
+        }
+
+        @keyframes verificarFadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .verificar-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 700;
+            line-height: 1;
+            margin: 0 auto var(--space-lg);
+            animation: verificarIconPop 0.35s ease-out;
+        }
+
+        @keyframes verificarIconPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .verificar-icon-success {
+            background-color: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .verificar-icon-error {
+            background-color: var(--danger-soft);
+            color: var(--danger);
+        }
+
+        .verificar-title {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 var(--space-sm);
+        }
+
+        .verificar-text {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            margin: 0 0 var(--space-xl);
+            line-height: 1.5;
+        }
+
+        .verificar-message {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            margin-top: var(--space-md);
+        }
+
+        .verificar-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .reenviar-form {
+            margin-top: var(--space-lg);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--border);
+            text-align: left;
+            animation: verificarFadeUp var(--transition-base) ease;
+        }
+    </style>
+</head>
+<body class="auth-body">
+    <div class="auth-container verificar-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <img src="assets/logo.svg" alt="FC" width="52" height="52">
+                <h1 class="auth-title">Financial Control</h1>
+            </div>
+
+            <!-- Estado: sem token na URL -->
+            <div id="stateNoToken" class="verificar-state hidden">
+                <div class="verificar-icon verificar-icon-error">&#10007;</div>
+                <h2 class="verificar-title">Link inválido</h2>
+                <p class="verificar-text">O link de verificação está incompleto.</p>
+                <a href="login.html" class="btn btn-primary btn-full">Ir para Login</a>
+            </div>
+
+            <!-- Estado: carregando -->
+            <div id="stateLoading" class="verificar-state hidden">
+                <div class="loading-center">
+                    <span class="spinner spinner-lg"></span>
+                </div>
+                <p class="verificar-message">Verificando seu email...</p>
+            </div>
+
+            <!-- Estado: sucesso -->
+            <div id="stateSuccess" class="verificar-state hidden">
+                <div class="verificar-icon verificar-icon-success">&#10003;</div>
+                <h2 class="verificar-title">Email verificado!</h2>
+                <p class="verificar-text" id="successMessage"></p>
+                <a href="login.html" class="btn btn-primary btn-full">Fazer Login</a>
+            </div>
+
+            <!-- Estado: erro (token inválido/expirado) -->
+            <div id="stateError" class="verificar-state hidden">
+                <div class="verificar-icon verificar-icon-error">&#10007;</div>
+                <h2 class="verificar-title">Não foi possível verificar</h2>
+                <p class="verificar-text" id="errorMessage"></p>
+
+                <div class="verificar-actions">
+                    <button type="button" class="btn btn-secondary btn-full" id="btnReenviar">Reenviar verificação</button>
+                    <a href="login.html" class="btn btn-primary btn-full">Ir para Login</a>
+                </div>
+
+                <form id="reenviarForm" class="reenviar-form hidden" novalidate>
+                    <div class="form-group">
+                        <label class="form-label" for="reenviarEmail">E-mail</label>
+                        <input class="form-input" type="email" id="reenviarEmail" name="reenviarEmail"
+                            placeholder="seu@email.com" required autocomplete="email">
+                        <span class="form-error" id="reenviarEmailError"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full" id="btnEnviarReenvio">
+                        <span class="btn-text">Enviar</span>
+                        <span class="btn-spinner hidden">
+                            <span class="spinner spinner-sm"></span>
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+        var states = {
+            noToken: document.getElementById('stateNoToken'),
+            loading: document.getElementById('stateLoading'),
+            success: document.getElementById('stateSuccess'),
+            error: document.getElementById('stateError'),
+        };
+
+        function showState(name) {
+            Object.keys(states).forEach(function (key) {
+                states[key].classList.toggle('hidden', key !== name);
+            });
+        }
+
+        function setButtonLoading(btn, loading) {
+            btn.disabled = loading;
+            btn.querySelector('.btn-text').classList.toggle('hidden', loading);
+            btn.querySelector('.btn-spinner').classList.toggle('hidden', !loading);
+        }
+
+        async function verificarEmail(token) {
+            showState('loading');
+            try {
+                var response = await fetch(API_BASE + '/auth/verificar?token=' + encodeURIComponent(token));
+                var data = {};
+                try { data = await response.json(); } catch (_) {}
+
+                if (response.ok) {
+                    document.getElementById('successMessage').textContent =
+                        data.message || 'Você já pode fazer login.';
+                    showState('success');
+                } else {
+                    document.getElementById('errorMessage').textContent =
+                        data.message || 'Não foi possível verificar seu e-mail.';
+                    showState('error');
+                }
+            } catch (networkErr) {
+                document.getElementById('errorMessage').textContent =
+                    'Sem conexão com o servidor. Verifique se o backend está rodando.';
+                showState('error');
+            }
+        }
+
+        // Toggle do formulário de reenvio
+        document.getElementById('btnReenviar').addEventListener('click', function () {
+            document.getElementById('reenviarForm').classList.remove('hidden');
+            this.classList.add('hidden');
+            document.getElementById('reenviarEmail').focus();
+        });
+
+        document.getElementById('reenviarForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            var btn = document.getElementById('btnEnviarReenvio');
+            var input = document.getElementById('reenviarEmail');
+            var errEl = document.getElementById('reenviarEmailError');
+            errEl.textContent = '';
+            input.classList.remove('input-error');
+
+            var email = input.value.trim();
+            if (!email) {
+                errEl.textContent = 'Informe seu e-mail.';
+                input.classList.add('input-error');
+                return;
+            }
+
+            setButtonLoading(btn, true);
+            try {
+                var response = await fetch(API_BASE + '/auth/reenviar-verificacao', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email }),
+                });
+                var data = {};
+                try { data = await response.json(); } catch (_) {}
+
+                if (response.ok) {
+                    showToast(data.message || 'E-mail de verificação reenviado com sucesso.', 'success');
+                    document.getElementById('reenviarForm').classList.add('hidden');
+                } else {
+                    showToast(data.message || 'Não foi possível reenviar a verificação.', 'error');
+                }
+            } catch (networkErr) {
+                showToast('Sem conexão com o servidor. Verifique se o backend está rodando.', 'error');
+            } finally {
+                setButtonLoading(btn, false);
+            }
+        });
+
+        // Init
+        var params = new URLSearchParams(window.location.search);
+        var token = params.get('token');
+        if (!token) {
+            showState('noToken');
+        } else {
+            verificarEmail(token);
+        }
+    </script>
+</body>
+</html>
