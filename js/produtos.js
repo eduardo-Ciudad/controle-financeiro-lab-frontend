@@ -103,14 +103,14 @@
             var valorEstoque = parseFloat(p.valorEmEstoque) || 0;
             var estoqueColor = estoque <= 0 ? 'text-danger' : estoque < 5 ? 'text-warning' : '';
             return '<tr class="clickable" data-id="' + p.id + '">' +
-                '<td><strong>' + escapeHtml(p.nome) + '</strong>' +
+                '<td data-label="Nome"><strong>' + escapeHtml(p.nome) + '</strong>' +
                 (p.descricao ? '<br><small class="text-muted">' + escapeHtml(p.descricao) + '</small>' : '') +
                 '</td>' +
-                '<td class="text-right font-mono">' + (p.precoCusto ? formatMoney(p.precoCusto) : '—') + '</td>' +
-                '<td class="text-right font-mono">' + formatMoney(p.precoVenda || 0) + '</td>' +
-                '<td class="text-right font-mono ' + estoqueColor + '">' + estoque + '</td>' +
-                '<td class="text-right font-mono">' + formatMoney(valorEstoque) + '</td>' +
-                '<td>' + statusBadge(p.ativo !== false) + '</td>' +
+                '<td class="text-right font-mono" data-label="Custo">' + (p.precoCusto ? formatMoney(p.precoCusto) : '—') + '</td>' +
+                '<td class="text-right font-mono" data-label="Preço de Venda">' + formatMoney(p.precoVenda || 0) + '</td>' +
+                '<td class="text-right font-mono ' + estoqueColor + '" data-label="Estoque">' + estoque + '</td>' +
+                '<td class="text-right font-mono" data-label="Valor em Estoque">' + formatMoney(valorEstoque) + '</td>' +
+                '<td data-label="Status">' + statusBadge(p.ativo !== false) + '</td>' +
                 '</tr>';
         }).join('');
 

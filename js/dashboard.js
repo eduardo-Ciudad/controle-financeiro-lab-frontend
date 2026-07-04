@@ -248,11 +248,11 @@
                             var corValor  = isCredito ? 'text-success' : 'text-danger';
                             var prefixo   = isCredito ? '+' : '-';
                             return '<tr>' +
-                                '<td><strong>' + escapeHtml(l.nome) + '</strong></td>' +
-                                '<td>' + categoriaBadge(l.categoria) + '</td>' +
-                                '<td class="text-secondary">' + escapeHtml(l.descricao || '—') + '</td>' +
-                                '<td class="text-secondary">' + escapeHtml(l.formaPagamento || '—') + '</td>' +
-                                '<td class="text-right font-mono ' + corValor + '">' +
+                                '<td data-label="' + escapeHtml(titulo.slice(0, -1)) + '"><strong>' + escapeHtml(l.nome) + '</strong></td>' +
+                                '<td data-label="Categoria">' + categoriaBadge(l.categoria) + '</td>' +
+                                '<td class="text-secondary" data-label="Descrição">' + escapeHtml(l.descricao || '—') + '</td>' +
+                                '<td class="text-secondary" data-label="Forma Pgto">' + escapeHtml(l.formaPagamento || '—') + '</td>' +
+                                '<td class="text-right font-mono ' + corValor + '" data-label="Valor">' +
                                     prefixo + formatMoney(Math.abs(parseFloat(l.valor) || 0)) +
                                 '</td>' +
                             '</tr>';
@@ -512,10 +512,10 @@ function atualizarVendaHeader() {
                 var valorColor = isCredito ? 'text-success' : 'text-danger';
                 var prefix     = isCredito ? '+' : '-';
                 return '<tr>' +
-                    '<td class="font-mono text-sm">' + formatDate(item.dataCompetencia || item.data) + '</td>' +
-                    '<td>' + escapeHtml(item._clienteNome || '—') + '</td>' +
-                    '<td>' + categoriaBadge(item.categoria) + '</td>' +
-                    '<td class="text-right font-mono ' + valorColor + '">' +
+                    '<td class="font-mono text-sm" data-label="Data">' + formatDate(item.dataCompetencia || item.data) + '</td>' +
+                    '<td data-label="Cliente">' + escapeHtml(item._clienteNome || '—') + '</td>' +
+                    '<td data-label="Categoria">' + categoriaBadge(item.categoria) + '</td>' +
+                    '<td class="text-right font-mono ' + valorColor + '" data-label="Valor">' +
                         prefix + formatMoney(Math.abs(parseFloat(item.valor) || 0)) +
                     '</td>' +
                 '</tr>';
@@ -653,12 +653,12 @@ function atualizarVendaHeader() {
 
             html +=
                 '<tr>' +
-                    '<td><strong>' + escapeHtml(p.nome) + '</strong></td>' +
-                    '<td class="text-right font-mono">' + formatQtd(p.qtdTotal) + '</td>' +
-                    '<td class="text-right font-mono text-success">' + formatMoney(p.receitaTotal) + '</td>' +
-                    '<td class="text-right font-mono text-danger">' + formatMoney(p.custoTotal) + '</td>' +
-                    '<td class="text-right font-mono ' + cor + '">' + formatMoney(pLucro) + '</td>' +
-                    '<td class="text-right font-mono ' + cor + '">' + pMargem + '%</td>' +
+                    '<td data-label="Produto"><strong>' + escapeHtml(p.nome) + '</strong></td>' +
+                    '<td class="text-right font-mono" data-label="Qtd Vendida">' + formatQtd(p.qtdTotal) + '</td>' +
+                    '<td class="text-right font-mono text-success" data-label="Receita">' + formatMoney(p.receitaTotal) + '</td>' +
+                    '<td class="text-right font-mono text-danger" data-label="Custo">' + formatMoney(p.custoTotal) + '</td>' +
+                    '<td class="text-right font-mono ' + cor + '" data-label="Lucro">' + formatMoney(pLucro) + '</td>' +
+                    '<td class="text-right font-mono ' + cor + '" data-label="Margem">' + pMargem + '%</td>' +
                 '</tr>';
         });
 
@@ -679,9 +679,9 @@ function atualizarVendaHeader() {
         compradores.forEach(function (c) {
             html +=
                 '<tr>' +
-                    '<td><strong>' + escapeHtml(c.nome) + '</strong></td>' +
-                    '<td class="text-right font-mono">' + c.qtdCompras + '</td>' +
-                    '<td class="text-right font-mono">' + formatMoney(c.totalGasto) + '</td>' +
+                    '<td data-label="Cliente"><strong>' + escapeHtml(c.nome) + '</strong></td>' +
+                    '<td class="text-right font-mono" data-label="Compras">' + c.qtdCompras + '</td>' +
+                    '<td class="text-right font-mono" data-label="Total Gasto">' + formatMoney(c.totalGasto) + '</td>' +
                 '</tr>';
         });
 
@@ -713,11 +713,11 @@ function atualizarVendaHeader() {
 
             html +=
                 '<tr>' +
-                    '<td class="font-mono text-sm">' + formatDate(v.dataCompetencia) + '</td>' +
-                    '<td><strong>' + escapeHtml(clienteNome) + '</strong></td>' +
-                    '<td class="text-sm">' + produtosStr + '</td>' +
-                    '<td>' + escapeHtml(v.formaPagamento || '—') + '</td>' +
-                    '<td class="text-right font-mono text-success">' + formatMoney(parseFloat(v.valor) || 0) + '</td>' +
+                    '<td class="font-mono text-sm" data-label="Data">' + formatDate(v.dataCompetencia) + '</td>' +
+                    '<td data-label="Cliente"><strong>' + escapeHtml(clienteNome) + '</strong></td>' +
+                    '<td class="text-sm" data-label="Produtos">' + produtosStr + '</td>' +
+                    '<td data-label="Forma Pgto">' + escapeHtml(v.formaPagamento || '—') + '</td>' +
+                    '<td class="text-right font-mono text-success" data-label="Valor">' + formatMoney(parseFloat(v.valor) || 0) + '</td>' +
                 '</tr>';
         });
 

@@ -314,12 +314,12 @@
             acoes += '<button class="btn btn-sm btn-ghost btn-excluir" data-id="' + c.id + '">Excluir</button>';
 
             return '<tr' + (isVencida ? ' style="background:rgba(239,68,68,0.05)"' : '') + '>' +
-                '<td>' + escapeHtml(c.descricao) + '</td>' +
-                '<td class="text-right font-mono">' + formatMoney(c.valor) + '</td>' +
-                '<td class="font-mono">' + formatDate(c.dataVencimento) + '</td>' +
-                '<td>' + badge + '</td>' +
-                '<td class="font-mono text-secondary">' + (c.dataPagamento ? formatDate(c.dataPagamento) : '—') + '</td>' +
-                '<td class="text-right">' + acoes + '</td>' +
+                '<td data-label="Descrição">' + escapeHtml(c.descricao) + '</td>' +
+                '<td class="text-right font-mono" data-label="Valor">' + formatMoney(c.valor) + '</td>' +
+                '<td class="font-mono" data-label="Vencimento">' + formatDate(c.dataVencimento) + '</td>' +
+                '<td data-label="Status">' + badge + '</td>' +
+                '<td class="font-mono text-secondary" data-label="Pagamento">' + (c.dataPagamento ? formatDate(c.dataPagamento) : '—') + '</td>' +
+                '<td class="text-right" data-label="Ações">' + acoes + '</td>' +
             '</tr>';
         }).join('');
 

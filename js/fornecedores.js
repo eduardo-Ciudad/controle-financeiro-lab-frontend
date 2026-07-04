@@ -96,11 +96,11 @@
     }
     tbody.innerHTML = fornecedores.map(function (f) {
         return '<tr class="clickable" data-id="' + f.id + '">' +
-            '<td><strong>' + escapeHtml(f.nome) + '</strong></td>' +
-            '<td>' + escapeHtml(f.documento || '—') + '</td>' +
-            '<td>' + escapeHtml(f.telefone || '—') + '</td>' +
-            '<td>' + statusBadge(f.ativo !== false) + '</td>' +
-            '<td class="text-right font-mono saldo-cell" data-fornecedor-id="' + f.id + '">' +
+            '<td data-label="Nome"><strong>' + escapeHtml(f.nome) + '</strong></td>' +
+            '<td data-label="Documento">' + escapeHtml(f.documento || '—') + '</td>' +
+            '<td data-label="Telefone">' + escapeHtml(f.telefone || '—') + '</td>' +
+            '<td data-label="Status">' + statusBadge(f.ativo !== false) + '</td>' +
+            '<td class="text-right font-mono saldo-cell" data-fornecedor-id="' + f.id + '" data-label="Saldo">' +
                 '<span class="text-muted">…</span>' +
             '</td>' +
         '</tr>';
@@ -303,12 +303,12 @@
             var isEstornado = item.estornado || item.categoria === 'ESTORNO';
 
             return '<tr' + (isEstornado ? ' style="opacity:0.5"' : '') + '>' +
-                '<td class="text-mono text-sm">' + formatDate(item.data || item.dataCompetencia) + '</td>' +
-                '<td>' + categoriaBadge(item.categoria) + '</td>' +
-                '<td class="text-secondary">' + escapeHtml(item.descricao || '—') + '</td>' +
-                '<td class="text-right font-mono ' + valorColor + '">' + valorPrefix + formatMoney(valorAbs) + '</td>' +
-                '<td class="text-right font-mono ' + saldoColor + '">' + formatMoney(item.saldoAcumulado || 0) + '</td>' +
-                '<td class="text-right">' +
+                '<td class="text-mono text-sm" data-label="Data">' + formatDate(item.data || item.dataCompetencia) + '</td>' +
+                '<td data-label="Categoria">' + categoriaBadge(item.categoria) + '</td>' +
+                '<td class="text-secondary" data-label="Descrição">' + escapeHtml(item.descricao || '—') + '</td>' +
+                '<td class="text-right font-mono ' + valorColor + '" data-label="Valor">' + valorPrefix + formatMoney(valorAbs) + '</td>' +
+                '<td class="text-right font-mono ' + saldoColor + '" data-label="Saldo">' + formatMoney(item.saldoAcumulado || 0) + '</td>' +
+                '<td class="text-right" data-label="Ação">' +
                 (!isEstornado && item.id
                     ? '<button class="btn btn-ghost btn-sm" data-id="' + item.id + '" title="Estornar">↩ Estornar</button>'
                     : '') +
