@@ -135,6 +135,10 @@
     text-decoration: underline;
 }
 
+.auth-legal-footer {
+    margin-top: var(--space-lg);
+}
+
 /* ===== DASHBOARD PAGE ===== */
 .dashboard-grid {
     display: grid;

@@ -231,6 +231,13 @@
     overflow: auto;
 }
 
+/* ===== APP FOOTER (legal links) ===== */
+.app-footer {
+    flex-shrink: 0;
+    padding: var(--space-md) var(--space-xl);
+    border-top: 1px solid var(--border);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
     .sidebar {
@@ -254,6 +261,10 @@
     }
 
     .main-content {
+        padding: var(--space-md);
+    }
+
+    .app-footer {
         padding: var(--space-md);
     }
 }

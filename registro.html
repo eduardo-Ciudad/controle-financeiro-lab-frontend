@@ -64,6 +64,14 @@
 
             <p class="auth-footer">Já tem conta? <a href="login.html">Entrar</a></p>
         </div>
+
+        <footer class="auth-legal-footer legal-links">
+            <a href="termos-de-uso.html">Termos de Uso</a>
+            <span class="legal-links__sep">·</span>
+            <a href="politica-de-privacidade.html">Política de Privacidade</a>
+            <span class="legal-links__sep">·</span>
+            <a href="politica-de-cookies.html">Política de Cookies</a>
+        </footer>
     </div>
 
     <div id="toastContainer" class="toast-container"></div>
@@ -72,6 +80,7 @@
     <script src="js/api.js"></script>
     <script src="js/components.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/cookie-consent.js"></script>
     <script>
         // Already logged in — skip to dashboard
         if (getToken()) window.location.href = 'dashboard.html';
