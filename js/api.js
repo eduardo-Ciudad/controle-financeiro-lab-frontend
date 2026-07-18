@@ -4,8 +4,8 @@
     // Atenção: é HTTP puro (sem SSL). Se o frontend for servido via HTTPS (ex: Vercel),
     // o navegador vai bloquear a requisição por mixed content — troque para https:// quando
     // a VPS tiver certificado configurado.
-   //var API_BASE = 'https://controlefinanceirolab.duckdns.org';
-     var API_BASE = 'http://localhost:8080';
+   var API_BASE = 'https://controlefinanceirolab.duckdns.org';
+     //var API_BASE = 'http://localhost:8080';
 
 
     function getToken() {
