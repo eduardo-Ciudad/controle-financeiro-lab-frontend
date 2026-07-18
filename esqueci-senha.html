@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha — Financial Control</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <style>
+        .esqueci-success {
+            text-align: center;
+            animation: esqueciFadeUp var(--transition-base) ease;
+        }
+
+        @keyframes esqueciFadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .esqueci-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 700;
+            line-height: 1;
+            margin: 0 auto var(--space-lg);
+            background-color: var(--accent-soft);
+            color: var(--accent);
+            animation: esqueciIconPop 0.35s ease-out;
+        }
+
+        @keyframes esqueciIconPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .esqueci-text {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            margin: 0 0 var(--space-xl);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body class="auth-body">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <img src="assets/logo.svg" alt="FC" width="52" height="52">
+                <h1 class="auth-title">Financial Control</h1>
+                <p class="auth-subtitle">Recuperar senha</p>
+            </div>
+
+            <div id="esqueciFormWrap">
+                <form id="esqueciForm" class="auth-form" novalidate>
+                    <div class="form-group">
+                        <label class="form-label" for="email">E-mail</label>
+                        <input class="form-input" type="email" id="email" name="email"
+                            placeholder="seu@email.com" required autocomplete="email">
+                        <span class="form-error" id="emailError"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full mt-md" id="esqueciBtn">
+                        <span class="btn-text">Enviar link de recuperação</span>
+                        <span class="btn-spinner hidden">
+                            <span class="spinner spinner-sm"></span>
+                        </span>
+                    </button>
+                </form>
+            </div>
+
+            <div id="esqueciSuccessWrap" class="esqueci-success hidden">
+                <div class="esqueci-icon">&#10003;</div>
+                <p class="esqueci-text">Se o email estiver cadastrado, você receberá um link em breve. Verifique também a pasta de spam.</p>
+                <a href="login.html" class="btn btn-secondary btn-full">Voltar para o login</a>
+            </div>
+
+            <p class="auth-footer" id="esqueciFooter">Lembrou a senha? <a href="login.html">Entrar</a></p>
+        </div>
+
+        <footer class="auth-legal-footer legal-links">
+            <a href="termos-de-uso.html">Termos de Uso</a>
+            <span class="legal-links__sep">·</span>
+            <a href="politica-de-privacidade.html">Política de Privacidade</a>
+            <span class="legal-links__sep">·</span>
+            <a href="politica-de-cookies.html">Política de Cookies</a>
+        </footer>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+        // Already logged in — skip to dashboard
+        if (getToken()) window.location.href = 'dashboard.html';
+
+        document.getElementById('esqueciForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            var btn = document.getElementById('esqueciBtn');
+            var emailInput = document.getElementById('email');
+            var emailError = document.getElementById('emailError');
+
+            clearFormErrors();
+
+            var email = emailInput.value.trim();
+            if (!email) {
+                emailError.textContent = 'Informe seu e-mail.';
+                emailInput.classList.add('input-error');
+                return;
+            }
+
+            setButtonLoading(btn, true);
+
+            try {
+                var response = await fetch(API_BASE + '/auth/esqueci-senha', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email }),
+                });
+                var data = {};
+                try { data = await response.json(); } catch (_) {}
+
+                showToast(data.message || 'Se o email estiver cadastrado, você receberá um link de recuperação.', 'success');
+                document.getElementById('esqueciFormWrap').classList.add('hidden');
+                document.getElementById('esqueciFooter').classList.add('hidden');
+                document.getElementById('esqueciSuccessWrap').classList.remove('hidden');
+            } catch (networkErr) {
+                showToast('Sem conexão com o servidor. Verifique se o backend está rodando.', 'error');
+            } finally {
+                setButtonLoading(btn, false);
+            }
+        });
+    </script>
+    <script src="js/cookie-consent.js"></script>
+</body>
+</html>

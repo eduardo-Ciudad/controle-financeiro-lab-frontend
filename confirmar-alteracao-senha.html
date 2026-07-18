@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Alteração de Senha — Financial Control</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <style>
+        .verificar-container {
+            max-width: 440px;
+        }
+
+        .verificar-state {
+            text-align: center;
+            animation: verificarFadeUp var(--transition-base) ease;
+        }
+
+        @keyframes verificarFadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .verificar-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 700;
+            line-height: 1;
+            margin: 0 auto var(--space-lg);
+            animation: verificarIconPop 0.35s ease-out;
+        }
+
+        @keyframes verificarIconPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .verificar-icon-success {
+            background-color: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .verificar-icon-error {
+            background-color: var(--danger-soft);
+            color: var(--danger);
+        }
+
+        .verificar-title {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 var(--space-sm);
+        }
+
+        .verificar-text {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            margin: 0 0 var(--space-xl);
+            line-height: 1.5;
+        }
+
+        .verificar-message {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            margin-top: var(--space-md);
+        }
+    </style>
+</head>
+<body class="auth-body">
+    <div class="auth-container verificar-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <img src="assets/logo.svg" alt="FC" width="52" height="52">
+                <h1 class="auth-title">Financial Control</h1>
+            </div>
+
+            <!-- Estado: sem token na URL -->
+            <div id="stateNoToken" class="verificar-state hidden">
+                <div class="verificar-icon verificar-icon-error">&#10007;</div>
+                <h2 class="verificar-title">Link inválido</h2>
+                <p class="verificar-text">O link de confirmação está incompleto.</p>
+                <a href="login.html" class="btn btn-primary btn-full">Ir para Login</a>
+            </div>
+
+            <!-- Estado: carregando -->
+            <div id="stateLoading" class="verificar-state hidden">
+                <div class="loading-center">
+                    <span class="spinner spinner-lg"></span>
+                </div>
+                <p class="verificar-message">Confirmando alteração de senha...</p>
+            </div>
+
+            <!-- Estado: sucesso -->
+            <div id="stateSuccess" class="verificar-state hidden">
+                <div class="verificar-icon verificar-icon-success">&#10003;</div>
+                <h2 class="verificar-title">Senha alterada!</h2>
+                <p class="verificar-text" id="successMessage"></p>
+                <a href="login.html" class="btn btn-primary btn-full">Fazer Login</a>
+            </div>
+
+            <!-- Estado: erro -->
+            <div id="stateError" class="verificar-state hidden">
+                <div class="verificar-icon verificar-icon-error">&#10007;</div>
+                <h2 class="verificar-title">Não foi possível confirmar</h2>
+                <p class="verificar-text" id="errorMessage"></p>
+                <a href="login.html" class="btn btn-primary btn-full">Ir para Login</a>
+            </div>
+        </div>
+
+        <footer class="auth-legal-footer legal-links">
+            <a href="termos-de-uso.html">Termos de Uso</a>
+            <span class="legal-links__sep">·</span>
+            <a href="politica-de-privacidade.html">Política de Privacidade</a>
+            <span class="legal-links__sep">·</span>
+            <a href="politica-de-cookies.html">Política de Cookies</a>
+        </footer>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+        var states = {
+            noToken: document.getElementById('stateNoToken'),
+            loading: document.getElementById('stateLoading'),
+            success: document.getElementById('stateSuccess'),
+            error: document.getElementById('stateError'),
+        };
+
+        function showState(name) {
+            Object.keys(states).forEach(function (key) {
+                states[key].classList.toggle('hidden', key !== name);
+            });
+        }
+
+        async function confirmarAlteracao(token) {
+            showState('loading');
+            try {
+                var response = await fetch(API_BASE + '/auth/confirmar-alteracao-senha?token=' + encodeURIComponent(token));
+                var data = {};
+                try { data = await response.json(); } catch (_) {}
+
+                if (response.ok) {
+                    document.getElementById('successMessage').textContent =
+                        data.message || 'Sua senha foi alterada com sucesso.';
+                    showState('success');
+                } else {
+                    document.getElementById('errorMessage').textContent =
+                        data.message || 'Não foi possível confirmar a alteração de senha.';
+                    showState('error');
+                }
+            } catch (networkErr) {
+                document.getElementById('errorMessage').textContent =
+                    'Sem conexão com o servidor. Verifique se o backend está rodando.';
+                showState('error');
+            }
+        }
+
+        // Init
+        var params = new URLSearchParams(window.location.search);
+        var token = params.get('token');
+        if (!token) {
+            showState('noToken');
+        } else {
+            confirmarAlteracao(token);
+        }
+    </script>
+    <script src="js/cookie-consent.js"></script>
+</body>
+</html>
