@@ -1,81 +1,120 @@
-# FinancialControl — Frontend
+# Financial Control Lab — Frontend
 
-Interface web do sistema de controle financeiro desenvolvido para um fornecedor de tecidos. Consome a API REST do backend para gerenciar clientes, fornecedores, produtos, estoque, lançamentos e contas pessoais.
+Interface web do sistema de controle financeiro multi-tenant. Consome a API REST do backend para gerenciar clientes, fornecedores, produtos, estoque, lançamentos e contas pessoais. Inclui fluxos completos de autenticação (login, registro, verificação de email, alteração e recuperação de senha), páginas legais em conformidade com a LGPD e cookie consent banner.
 
 ## Stack
 
 - **HTML5**, **CSS3** e **JavaScript** vanilla (sem frameworks)
-- Deploy via **Vercel**
+- **CSS Variables** — design system centralizado (cores, tipografia, espaçamento, radius)
+- Deploy via **Vercel** com deploy automático
 
 ## Funcionalidades
 
 ### Autenticação
-- Tela de login e tela de cadastro (`registro.html`) — sistema multi-tenant self-service, sem usuário admin fixo
-- Autenticação JWT (`POST /auth/login`, `POST /auth/registro`)
-- Armazenamento do token no `localStorage`
-- Redirecionamento automático para login quando o token expira ou é inválido (401/403)
+- Login e cadastro com verificação de email obrigatória
+- Autenticação JWT armazenada no `localStorage`
+- Redirecionamento automático para login quando o token expira (401)
+
+### Alteração de senha (usuário logado)
+- Formulário na área interna com senha atual, nova senha e confirmação
+- Envio de email de confirmação — a senha só é aplicada após clicar no link
+- Página de confirmação (`confirmar-alteracao-senha.html`) com estados de loading, sucesso e erro
+
+### Recuperação de senha (usuário deslogado)
+- Link "Esqueci minha senha" na tela de login
+- Formulário para informar email e receber link de recuperação
+- Página de reset (`resetar-senha.html`) com formulário para definir nova senha
+- Validação client-side: senhas coincidem, mínimo 6 caracteres
+
+### Páginas legais (LGPD)
+- Termos de Uso, Política de Privacidade e Política de Cookies
+- Conteúdo em conformidade com a Lei 13.709/2018
+- Links acessíveis no footer de todas as páginas de autenticação
+
+### Cookie Consent Banner
+- Auto-injetado via JavaScript puro em todas as páginas
+- Opções: "Aceitar todos" ou "Apenas necessários"
+- Persistência em `localStorage` com timestamp e expiração de 365 dias
 
 ### Dashboard
 - Visão consolidada com cards de resumo (receitas, despesas, saldos)
-- Resumo diário
+- Resumo diário e navegação mensal
 
 ### Clientes
-- Listagem, cadastro, edição e exclusão de clientes
-- Visualização de lançamentos vinculados a cada cliente
-- Consulta de saldo por cliente
+- Listagem, cadastro, edição e exclusão
+- Lançamentos no modelo conta-corrente com extrato agrupado por mês
 
 ### Fornecedores
-- Listagem, cadastro, edição e exclusão de fornecedores
-- Lançamentos de contas a pagar por fornecedor
+- Listagem, cadastro, edição e exclusão
+- Lançamentos de compra com preço unitário por operação
 
 ### Produtos e Estoque
 - Catálogo de produtos com CRUD completo
-- Registro de movimentações de estoque (entrada/saída)
-- Visualização de saldo de estoque por produto
+- Movimentações de estoque (entrada/saída)
 
 ### Contas Pessoais
-- CRUD completo de contas pessoais
-- Criação de compras parceladas (parcelamento automático via API)
-- Navegação mensal com cards de resumo
-- Visualização de resumo diário
+- CRUD completo com parcelamento automático
+- Navegação mensal com resumo
 
-### Lançamentos
-- Registro de lançamentos para clientes (contas a receber)
-- Registro de lançamentos para fornecedores (contas a pagar)
-- Filtros e navegação por período
+### Vendas
+- Registro de vendas com integração automática ao estoque
 
 ## Estrutura do Projeto
 
 ```
 /
-├── index.html              # Landing page
-├── login.html              # Tela de login
-├── registro.html           # Tela de cadastro (novo usuário)
-├── dashboard.html          # Dashboard principal
-├── clientes.html           # Gestão de clientes
-├── fornecedores.html       # Gestão de fornecedores
-├── produtos.html           # Catálogo de produtos
-├── estoque.html            # Movimentação de estoque
-├── lancamentos.html        # Lançamentos de clientes
-├── lancamentos-fornecedor.html  # Lançamentos de fornecedores
-├── contas-pessoais.html    # Contas pessoais e parcelamento
+├── index.html                          # Landing page
+├── login.html                          # Login
+├── registro.html                       # Cadastro
+├── verificar.html                      # Verificação de email (token via URL)
+├── esqueci-senha.html                  # Solicitar recuperação de senha
+├── resetar-senha.html                  # Definir nova senha (token via URL)
+├── confirmar-alteracao-senha.html      # Confirmar alteração de senha (token via URL)
+├── alterar-senha.html                  # Alterar senha (área logada, com sidebar)
+├── dashboard.html                      # Dashboard principal
+├── clientes.html                       # Gestão de clientes
+├── fornecedores.html                   # Gestão de fornecedores
+├── produtos.html                       # Catálogo de produtos
+├── vendas.html                         # Registro de vendas
+├── pessoal.html                        # Contas pessoais
+├── termos-de-uso.html                  # Termos de Uso
+├── politica-de-privacidade.html        # Política de Privacidade (LGPD)
+├── politica-de-cookies.html            # Política de Cookies
+├── assets/
+│   └── logo.svg                        # Logo do sistema
+├── img/
+│   └── favicon.png                     # Favicon
 ├── css/
-│   └── style.css           # Estilos globais
+│   ├── variables.css                   # Design tokens (cores, fontes, espaçamento)
+│   ├── global.css                      # Reset e estilos base
+│   ├── components.css                  # Buttons, inputs, cards, toasts, spinners
+│   ├── layout.css                      # Sidebar, topbar, app-layout
+│   ├── pages.css                       # Estilos de páginas de autenticação
+│   └── legal.css                       # Estilos das páginas legais
 ├── js/
-│   ├── auth.js             # Lógica de autenticação e gerenciamento de token
-│   ├── api.js              # Funções de comunicação com a API (fetch + headers JWT)
-│   ├── dashboard.js        # Lógica do dashboard
-│   ├── clientes.js         # CRUD de clientes
-│   ├── fornecedores.js     # CRUD de fornecedores
-│   ├── produtos.js         # CRUD de produtos
-│   ├── estoque.js          # Movimentação de estoque
-│   ├── lancamentos.js      # Lançamentos de clientes
-│   ├── lancamentos-fornecedor.js  # Lançamentos de fornecedores
-│   └── contas-pessoais.js  # Contas pessoais e parcelamento
-└── vercel.json             # Configuração de deploy no Vercel
+│   ├── api.js                          # Wrapper fetch com auth e tratamento de erros
+│   ├── auth.js                         # Route guard, logout, mobile sidebar
+│   ├── components.js                   # Toasts e componentes reutilizáveis
+│   ├── cookie-consent.js               # Banner de consentimento de cookies
+│   ├── router.js                       # Highlight do nav-item ativo na sidebar
+│   ├── utils.js                        # Funções utilitárias
+│   ├── dashboard.js                    # Lógica do dashboard
+│   ├── clientes.js                     # CRUD de clientes
+│   ├── fornecedores.js                 # CRUD de fornecedores
+│   ├── produtos.js                     # CRUD de produtos
+│   ├── pessoal.js                      # Contas pessoais
+│   └── vendas.js                       # Vendas
 ```
 
-> **Nota:** Os nomes dos arquivos podem variar. Confira com a estrutura real do repositório e ajuste conforme necessário.
+## Design System
+
+O design é construído sobre CSS Variables centralizadas em `variables.css`:
+
+- **Tema** — dark theme com backgrounds hierárquicos (`#0f1117`, `#1a1d27`, `#242836`)
+- **Accent** — verde-esmeralda (`#10b981`) para ações primárias e destaques
+- **Tipografia** — Inter (Google Fonts), com escala de `0.75rem` a `2rem`
+- **Componentes** — classes reutilizáveis (`btn`, `btn-primary`, `form-input`, `auth-card`, etc.)
+- **Responsividade** — sidebar colapsável com hamburger menu em mobile
 
 ## Como Rodar Localmente
 
@@ -92,57 +131,43 @@ Não há build step nem dependências npm — é HTML/CSS/JS puro.
 # Com Python
 python -m http.server 5500
 
-# Com Node.js (npx, sem instalar nada)
+# Com Node.js
 npx serve -l 5500
 ```
 
 ### Configuração da API
 
-O frontend se comunica com o backend via fetch. A URL base da API está centralizada na constante `API_BASE`, no topo de [js/api.js](js/api.js). Atualmente aponta para o backend multi-tenant (controle-financeiro-lab) rodando na VPS:
+A URL base da API está em `js/api.js` na constante `API_BASE`. Atualmente aponta para o backend na VPS:
 
 ```
-http://187.77.57.4:8080
+https://controlefinanceirolab.duckdns.org
 ```
 
-Para apontar para um backend local durante o desenvolvimento, troque `API_BASE` para:
+Para desenvolvimento local, troque para:
 
 ```
 http://localhost:8080
 ```
 
-> **Importante:** O backend precisa estar rodando e com CORS configurado para a origin do frontend (`http://localhost:5500` em dev, `https://cadin-financeiro.vercel.app` em produção).
->
-> **Mixed content:** a VPS atualmente serve a API em HTTP puro (sem SSL). Se o frontend for acessado via HTTPS (ex: Vercel), o navegador vai bloquear as requisições por mixed content. Enquanto a VPS não tiver certificado configurado, teste o frontend também via HTTP (`http://localhost:5500`, Live Server, etc.). Quando a VPS tiver HTTPS, atualize `API_BASE` em [js/api.js](js/api.js) para `https://...`.
+> O backend precisa estar rodando e com CORS configurado para a origin do frontend.
 
 ## Deploy
 
-O frontend é hospedado no **Vercel** com deploy automático a partir do repositório GitHub.
+Hospedado no **Vercel** com deploy automático a partir do repositório GitHub.
 
 - **URL de Produção:** [cadin-financeiro.vercel.app](https://cadin-financeiro.vercel.app)
-- **Backend:** `http://187.77.57.4:8080` (VPS, controle-financeiro-lab multi-tenant)
+- **Backend:** [controlefinanceirolab.duckdns.org](https://controlefinanceirolab.duckdns.org)
 
 ### Configuração no Vercel
 
 - **Framework Preset:** Other
-- **Build Command:** nenhum (não há build step)
+- **Build Command:** nenhum
 - **Output Directory:** `.` (raiz do projeto)
-
-## Comunicação com a API
-
-Todas as requisições à API (exceto login) incluem o header de autenticação:
-
-```javascript
-headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-}
-```
-
-O token JWT é obtido no login e armazenado no `localStorage`. Quando o token expira ou é inválido, o usuário é redirecionado automaticamente para a tela de login.
 
 ## Autor
 
-**Eduardo Ciudad**
-- GitHub: [eduardo-Ciudad](https://github.com/eduardo-Ciudad)
-- LinkedIn: [eduardociudadf](https://linkedin.com/in/eduardociudadf/)
-- Portfolio: [eduardo-ciudad-portfolio.vercel.app](https://eduardo-ciudad-portfolio.vercel.app)
+**Eduardo Ciudad** — Desenvolvedor Backend Java
+
+- GitHub: [github.com/eduardo-Ciudad](https://github.com/eduardo-Ciudad)
+- LinkedIn: [linkedin.com/in/eduardociudadf](https://linkedin.com/in/eduardociudadf/)
+- Instagram: [@ciudad_dev](https://instagram.com/ciudad_dev)
